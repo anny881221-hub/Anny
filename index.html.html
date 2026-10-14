@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>義大醫療志工隊 — 溫心服務體驗小遊戲</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Custom Theme Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        eda: {
+                            purple: '#4A154B',
+                            lightpurple: '#7C2D82',
+                            gold: '#D4AF37',
+                            softbg: '#F9F6FA',
+                            teal: '#008080'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;600;700&display=swap');
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F8F9FA;
+        }
+        .animate-bounce-slow {
+            animation: bounce 2s infinite;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        .drop-zone {
+            transition: all 0.2s ease-in-out;
+        }
+        .drop-zone.drag-over {
+            border-color: #7C2D82;
+            background-color: #F3E8F4;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="bg-eda-softbg text-gray-800 min-h-screen flex flex-col justify-between">
+
+    <!-- 頁首 Header -->
+    <header class="bg-gradient-to-r from-eda-purple via-eda-lightpurple to-eda-teal text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white text-eda-purple rounded-full flex items-center justify-center font-bold text-xl shadow">
+                    <i class="fa-solid font-bold text-eda-purple fa-heart-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">義大醫療志工隊</h1>
+                    <p class="text-xs text-purple-200">溫心關懷 ‧ 用心陪伴 ‧ 志工園地體驗</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-sm font-medium">
+                <a href="#about" class="hover:text-yellow-300 transition">隊伍介紹</a>
+                <a href="#game" class="hover:text-yellow-300 transition">體驗遊戲</a>
+                <a href="#publications" class="hover:text-yellow-300 transition">志工刊物與成果</a>
+                <a href="#join" class="hover:text-yellow-300 transition">加入志工</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主要內容區 -->
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow">
+
+        <!-- 橫幅 Banner -->
+        <section id="about" class="bg-white rounded-2xl shadow-sm border border-purple-100 p-6 md:p-8 mb-8 relative overflow-hidden">
+            <div class="md:w-3/4 relative z-10">
+                <span class="bg-purple-100 text-eda-purple text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">義大醫療財團法人 社會工作科</span>
+                <h2 class="text-2xl md:text-4xl font-bold text-eda-purple mt-3 mb-4">攜手傳遞溫暖，成為病患心中的微光</h2>
+                <p class="text-gray-600 leading-relaxed mb-6">
+                    義大醫療志工隊長年陪伴在病人與家屬身邊。無論是在門診引導、病房兒科手作、溫心茶推服務、門診陪玩與說故事，或是深入社區據點傳遞健康知識，都有志工無私奉獻的身影。
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#game" class="bg-eda-purple hover:bg-eda-lightpurple text-white font-semibold px-6 py-3 rounded-xl shadow hover:shadow-md transition flex items-center gap-2">
+                        <i class="fa-solid fa-gamepad"></i> 開始志工體驗遊戲
+                    </a>
+                    <a href="https://exdep.edah.org.tw/edss/index.php/2018-08-30-07-27-27" target="_blank" rel="noopener noreferrer" class="bg-white border border-eda-purple text-eda-purple hover:bg-purple-50 font-semibold px-5 py-3 rounded-xl transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> 前往社工科官網
+                    </a>
+                </div>
+            </div>
+            <div class="hidden md:block absolute -right-6 -bottom-6 w-80 h-80 bg-purple-100 rounded-full opacity-50 pointer-events-none"></div>
+            <i class="fa-solid fa-hand-holding-heart text-purple-200 text-9xl absolute -right-2 bottom-2 hidden md:block"></i>
+        </section>
+
+        <!-- 服務項目簡介 Cards -->
+        <section class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
+            <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                <div class="w-12 h-12 bg-purple-100 text-eda-purple rounded-lg flex items-center justify-center text-xl mb-3">
+                    <i class="fa-solid fa-hospital-user"></i>
+                </div>
+                <h3 class="font-bold text-gray-800 text-lg mb-1">門診服務</h3>
+                <p class="text-sm text-gray-600">方向諮詢、自動報到輔導、門診陪玩與說故事服務，舒緩候診焦慮。</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                <div class="w-12 h-12 bg-pink-100 text-pink-600 rounded-lg flex items-center justify-center text-xl mb-3">
+                    <i class="fa-solid fa-hand-holding-hand"></i>
+                </div>
+                <h3 class="font-bold text-gray-800 text-lg mb-1">病房關懷</h3>
+                <p class="text-sm text-gray-600">病房兒科手作服務、茶推服務送溫暖，陪伴病童與住院病患舒緩壓力。</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                <div class="w-12 h-12 bg-teal-100 text-teal-600 rounded-lg flex items-center justify-center text-xl mb-3">
+                    <i class="fa-solid fa-users-between-lines"></i>
+                </div>
+                <h3 class="font-bold text-gray-800 text-lg mb-1">社區據點服務</h3>
+                <p class="text-sm text-gray-600">深入社區照顧據點，協助衛教宣導、健康檢測與長者關懷互動。</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                <div class="w-12 h-12 bg-yellow-100 text-yellow-700 rounded-lg flex items-center justify-center text-xl mb-3">
+                    <i class="fa-solid fa-icons"></i>
+                </div>
+                <h3 class="font-bold text-gray-800 text-lg mb-1">藝文與活動支援</h3>
+                <p class="text-sm text-gray-600">音樂角表演支援、節慶關懷活動與義賣等各項推廣活動。</p>
+            </div>
+        </section>
+
+        <!-- 遊戲主區塊 Game Container -->
+        <section id="game" class="bg-white rounded-2xl shadow-md border border-purple-100 overflow-hidden mb-12">
+            <div class="bg-eda-purple text-white px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-puzzle-piece text-yellow-400 text-xl"></i>
+                    <h3 class="font-bold text-lg">一日義大醫療志工體驗小遊戲</h3>
+                </div>
+                <div id="game-status" class="text-xs bg-purple-900 bg-opacity-60 px-3 py-1 rounded-full text-purple-200">
+                    階段：準備開始
+                </div>
+            </div>
+
+            <!-- 遊戲儀表板 Scorebar -->
+            <div id="score-bar" class="hidden bg-purple-50 px-6 py-3 border-b border-purple-100 flex justify-between items-center text-sm">
+                <div class="flex items-center gap-4">
+                    <div>愛心積分：<span id="score-display" class="font-bold text-xl text-eda-purple">0</span> 分</div>
+                    <div>獲得稱號：<span id="title-display" class="font-semibold text-eda-teal">實習熱血志工</span></div>
+                </div>
+                <div id="timer-box" class="hidden text-red-600 font-bold">
+                    <i class="fa-solid fa-clock"></i> 剩餘時間：<span id="timer-display">30</span> 秒
+                </div>
+            </div>
+
+            <!-- 遊戲內部動態畫面 -->
+            <div class="p-6 md:p-8 min-h-[420px] flex flex-col justify-center items-center" id="game-viewport">
+
+                <!-- 遊戲開始 Start Screen -->
+                <div id="screen-start" class="text-center max-w-lg">
+                    <div class="w-20 h-20 bg-purple-100 text-eda-purple rounded-full flex items-center justify-center text-3xl mx-auto mb-4 animate-bounce-slow">
+                        <i class="fa-solid fa-user-nurse"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">準備好加入義大志工服務行列了嗎？</h3>
+                    <p class="text-gray-600 mb-6 text-sm">
+                        透過 2 個簡單小關卡，體驗義大醫療志工的日常服務情境！考驗您的同理心與服務靈敏度。
+                    </p>
+                    <button onclick="startGame()" class="bg-eda-purple hover:bg-eda-lightpurple text-white font-bold text-lg px-8 py-3 rounded-full shadow-lg transform hover:-translate-y-0.5 transition">
+                        開始體驗任務 <i class="fa-solid fa-circle-arrow-right ml-1"></i>
+                    </button>
+                </div>
+
+                <!-- 階段 1：情境問答挑戰 Scenario Quiz -->
+                <div id="screen-quiz" class="hidden w-full max-w-2xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xs font-bold text-eda-purple bg-purple-100 px-3 py-1 rounded-full">Phase 1: 服務服務情境判斷</span>
+                        <span class="text-xs text-gray-500" id="quiz-progress">題目 1 / 2</span>
+                    </div>
+                    <h4 id="quiz-question" class="text-lg font-bold text-gray-800 mb-4 leading-snug"></h4>
+                    <div id="quiz-options" class="space-y-3 mb-6">
+                        <!-- 動態插入選項 -->
+                    </div>
+                    <div id="quiz-feedback" class="hidden p-4 rounded-xl text-sm mb-4"></div>
+                    <button id="next-quiz-btn" onclick="nextQuiz()" class="hidden bg-eda-purple text-white px-6 py-2 rounded-lg font-semibold ml-auto flex items-center gap-2">
+                        下一題 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- 階段 2：地點與服務快速配對 Drag & Drop Matching -->
+                <div id="screen-match" class="hidden w-full max-w-3xl">
+                    <div class="mb-4 text-center">
+                        <span class="text-xs font-bold text-eda-purple bg-purple-100 px-3 py-1 rounded-full">Phase 2: 服務項目與地點配對</span>
+                        <p class="text-sm text-gray-600 mt-2">請點擊左側的「服務任務」，再點擊右側對應的「服務地點」進行配對！</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-4">
+                        <!-- 任務卡片清單 -->
+                        <div class="space-y-3">
+                            <h5 class="text-sm font-bold text-gray-700 mb-2 border-b pb-1"><i class="fa-solid fa-hand-holding-heart text-eda-purple"></i> 服務任務</h5>
+                            <div id="item-list" class="space-y-2">
+                                <!-- 項目動態渲染 -->
+                            </div>
+                        </div>
+
+                        <!-- 放置區域清單 -->
+                        <div class="space-y-3">
+                            <h5 class="text-sm font-bold text-gray-700 mb-2 border-b pb-1"><i class="fa-solid fa-location-dot text-eda-teal"></i> 服務地點 / 區域</h5>
+                            <div id="target-list" class="space-y-2">
+                                <!-- 地點動態渲染 -->
+                            </div>
+                        </div>
+                    </div>
+                    <div id="match-feedback" class="text-center font-bold text-sm min-h-[24px]"></div>
+                </div>
+
+                <!-- 結算畫面與志工證書 Result & Certificate -->
+                <div id="screen-result" class="hidden w-full max-w-xl text-center">
+                    <div class="bg-white border-4 border-eda-gold p-6 rounded-2xl shadow-xl relative overflow-hidden">
+                        <div class="absolute -top-10 -right-10 w-28 h-28 bg-yellow-100 rounded-full opacity-40"></div>
+                        
+                        <div class="flex justify-center mb-3">
+                            <div class="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center text-3xl shadow">
+                                <i class="fa-solid fa-award"></i>
+                            </div>
+                        </div>
+
+                        <span class="text-xs text-gray-500 tracking-widest uppercase">義大醫療隊 溫心榮譽志工證</span>
+                        <h3 class="text-2xl font-bold text-eda-purple mt-1 mb-2">一日志工體驗認證</h3>
+                        
+                        <div class="my-4 py-3 bg-purple-50 rounded-xl border border-purple-100">
+                            <p class="text-gray-600 text-xs mb-1">體驗者：<input type="text" id="user-name" value="熱心民眾" class="border-b border-purple-300 bg-transparent text-center font-bold text-gray-800 focus:outline-none px-2 py-0.5" title="輸入您的名字"></p>
+                            <p class="text-sm text-gray-700">最終得分：<span id="final-score" class="text-2xl font-bold text-eda-purple">100</span> 分</p>
+                            <p class="text-sm font-bold text-eda-teal mt-1">獲得榮譽：<span id="final-title">極致溫暖心志工</span></p>
+                        </div>
+
+                        <p id="result-desc" class="text-xs text-gray-500 leading-relaxed mb-6">
+                            感謝您熱情參與體驗！每一份關懷都是改變醫院氛圍的強大力量，歡迎加入義大醫療志工隊！
+                        </p>
+
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <button onclick="startGame()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-sm px-4 py-2 rounded-lg transition">
+                                <i class="fa-solid fa-rotate-right"></i> 再試一次
+                            </button>
+                            <button onclick="printCertificate()" class="bg-eda-purple hover:bg-eda-lightpurple text-white font-semibold text-sm px-5 py-2 rounded-lg shadow transition">
+                                <i class="fa-solid fa-print"></i> 列印/保存志工證
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 志工刊物與歷年成果專區 (官方最新資料) -->
+        <section id="publications" class="mb-12 bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-purple-100">
+            <div class="flex items-center justify-between border-b pb-4 mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-eda-purple flex items-center gap-2">
+                        <i class="fa-solid fa-newspaper text-eda-teal"></i> 志工刊物與服務成果
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-1">同步自義大醫療社工科志工園地最新公告</p>
+                </div>
+                <a href="https://exdep.edah.org.tw/edss/index.php/2018-08-30-07-27-27" target="_blank" rel="noopener noreferrer" class="text-xs text-eda-purple font-semibold hover:underline">觀看更多 <i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 志工刊物列表 -->
+                <div class="bg-purple-50 rounded-xl p-5 border border-purple-100">
+                    <h4 class="font-bold text-eda-purple text-sm mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-book-open"></i> 志工刊物線上瀏覽
+                    </h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex justify-between items-center bg-white p-2.5 rounded-lg shadow-sm">
+                            <span class="font-medium text-gray-700">115年 (第12期) 志工刊物</span>
+                            <span class="text-xs bg-purple-100 text-eda-purple px-2 py-1 rounded">最新發行</span>
+                        </li>
+                        <li class="flex justify-between items-center bg-white p-2.5 rounded-lg shadow-sm">
+                            <span class="font-medium text-gray-700">114年 (第10期) 志工刊物</span>
+                            <span class="text-xs text-gray-400">精彩典藏</span>
+                        </li>
+                        <li class="flex justify-between items-center bg-white p-2.5 rounded-lg shadow-sm">
+                            <span class="font-medium text-gray-700">113年 (第9期) 志工刊物</span>
+                            <span class="text-xs text-gray-400">精彩典藏</span>
+                        </li>
+                        <li class="flex justify-between items-center bg-white p-2.5 rounded-lg shadow-sm">
+                            <span class="font-medium text-gray-700">112年 (第8期) 志工刊物</span>
+                            <span class="text-xs text-gray-400">精彩典藏</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 服務成果海報 -->
+                <div class="bg-teal-50 rounded-xl p-5 border border-teal-100">
+                    <h4 class="font-bold text-eda-teal text-sm mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line"></i> 歷年服務成果海報
+                    </h4>
+                    <div class="grid grid-cols-2 gap-2 text-center text-xs font-semibold">
+                        <div class="bg-white p-3 rounded-lg shadow-sm border border-teal-100">
+                            <div class="text-eda-teal text-base font-bold">114年度</div>
+                            <div class="text-gray-500 mt-0.5">服務成果展示</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm border border-teal-100">
+                            <div class="text-eda-teal text-base font-bold">113年度</div>
+                            <div class="text-gray-500 mt-0.5">服務成果展示</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm border border-teal-100">
+                            <div class="text-eda-teal text-base font-bold">112年度</div>
+                            <div class="text-gray-500 mt-0.5">服務成果展示</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm border border-teal-100">
+                            <div class="text-eda-teal text-base font-bold">111年度</div>
+                            <div class="text-gray-500 mt-0.5">服務成果展示</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 志工招募資訊網招募頁 Join Section -->
+        <section id="join" class="bg-gradient-to-br from-eda-purple to-eda-lightpurple text-white rounded-2xl p-6 md:p-8 shadow-md">
+            <div class="md:flex justify-between items-center">
+                <div class="md:w-2/3 mb-6 md:mb-0">
+                    <div class="inline-block bg-yellow-400 text-eda-purple text-xs font-bold px-3 py-1 rounded-full mb-3">
+                        志工招募進行中
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">歡迎點擊下載【志工報名表】加入我們</h3>
+                    <p class="text-purple-100 text-sm leading-relaxed mb-4">
+                        只要您年滿18歲、身體健康、富有服務熱忱，每週可固定服務3小時以上，歡迎加入義大醫療志工隊大家庭！
+                    </p>
+                    <div class="text-xs text-purple-200 space-y-1">
+                        <p><i class="fa-solid fa-phone mr-1"></i> 諮詢電話：義大醫療財團法人 社會工作科</p>
+                        <p><i class="fa-solid fa-location-dot mr-1"></i> 服務地點：義大醫院、義大癌治療醫院、義大大昌醫院及社區照顧據點</p>
+                    </div>
+                </div>
+                <div class="md:w-1/3 flex flex-col items-center md:items-end space-y-3">
+                    <a href="https://exdep.edah.org.tw/edss/index.php/2018-08-30-07-27-27" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-yellow-400 hover:bg-yellow-300 text-eda-purple font-bold py-3 px-6 rounded-xl shadow transition transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-file-arrow-down mr-2"></i>【志工報名表下載】
+                    </a>
+                    <span class="text-xs text-purple-200">點擊前往官網下載專用報名表格</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 頁尾 Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-6 text-center text-xs">
+        <div class="max-w-6xl mx-auto px-4 space-y-2">
+            <p>義大醫療財團法人 社會工作科 版權所有 &copy; E-Da Healthcare Group Social Work Section</p>
+            <p class="text-gray-500">本網站小遊戲為體驗宣導用途 | 資訊同步更新自義大醫療社工科志工園地</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript 遊戲邏輯 -->
+    <script>
+        // 遊戲狀態與數據 Game State
+        let score = 0;
+        let currentQuizIndex = 0;
+        let timer = null;
+        let timeLeft = 30;
+        let selectedItem = null;
+
+        // 音效系統 (Web Audio API Synth)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTone(freq, type, duration) {
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+        function playSuccessSound() { playTone(587.33, 'sine', 0.15); setTimeout(() => playTone(880, 'sine', 0.25), 150); }
+        function playErrorSound() { playTone(200, 'sawtooth', 0.2); }
+
+        // Phase 1 情境問答題目資料
+        const quizData = [
+            {
+                q: "當您在門診大廳服務時，看到一位高齡長者拿著檢查單、眼神迷惘地停在路中間，您該怎麼做？",
+                options: [
+                    { text: "A. 視而不見，等待長者主動開口求助。", correct: false },
+                    { text: "B. 主動關懷詢問，引導長者至正確診間或報到櫃檯，並溫馨提醒注意事項。", correct: true },
+                    { text: "C. 直接大聲呼叫家屬過來帶人。", correct: false }
+                ],
+                explanation: "正確！志工展現主動貼心的態度，能引導長者至正確診間或報到櫃檯，溫暖安撫患者緊張情緒。"
+            },
+            {
+                q: "在兒科病房進行「病房兒科手作服務」時，遇到病童因為注射點滴而哭鬧不願參與，您可以怎麼做？",
+                options: [
+                    { text: "A. 溫柔鼓勵，展現手作成品吸引興趣，並邀請家屬一同輕聲陪伴。", correct: true },
+                    { text: "B. 強迫病童一定要完成一份手作勞作。", correct: false },
+                    { text: "C. 立刻收起材料離開，不再理會。", correct: false }
+                ],
+                explanation: "正確！病房兒科手作服務重點在於陪伴與轉移注意力，透過溫柔鼓勵與家屬協同，能有效舒緩病童住院壓力。"
+            }
+        ];
+
+        // Phase 2 配對遊戲資料
+        const matchData = [
+            { id: "m1", label: "門診陪玩與說故事", target: "t1", targetName: "門診兒童遊戲候診區" },
+            { id: "m2", label: "茶推服務", target: "t2", targetName: "住院病房護理區" },
+            { id: "m3", label: "病房兒科手作服務", target: "t3", targetName: "兒科住院病房" },
+            { id: "m4", label: "衛教宣導與長者關懷", target: "t4", targetName: "社區照顧據點" }
+        ];
+
+        let matchedCount = 0;
+
+        // 開始遊戲
+        function startGame() {
+            score = 0;
+            currentQuizIndex = 0;
+            matchedCount = 0;
+            updateScore(0);
+
+            document.getElementById('screen-start').classList.add('hidden');
+            document.getElementById('screen-result').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.remove('hidden');
+            document.getElementById('screen-match').classList.add('hidden');
+            document.getElementById('score-bar').classList.remove('hidden');
+            document.getElementById('game-status').innerText = "階段：1/2 情境判斷";
+
+            loadQuiz();
+        }
+
+        // 更新分數與稱號
+        function updateScore(points) {
+            score += points;
+            document.getElementById('score-display').innerText = score;
+
+            let title = "實習熱血志工";
+            if (score >= 90) title = "極致溫暖心志工";
+            else if (score >= 60) title = "熱心資深志工";
+            
+            document.getElementById('title-display').innerText = title;
+        }
+
+        // 載入情境問答
+        function loadQuiz() {
+            const current = quizData[currentQuizIndex];
+            document.getElementById('quiz-progress').innerText = `題目 ${currentQuizIndex + 1} / ${quizData.length}`;
+            document.getElementById('quiz-question').innerText = current.q;
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('next-quiz-btn').classList.add('hidden');
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            current.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-3.5 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 transition text-sm flex items-center justify-between";
+                btn.innerHTML = `<span>${opt.text}</span> <i class="fa-regular fa-circle text-gray-300"></i>`;
+                btn.onclick = () => checkQuizAnswer(idx, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        // 檢查問答答案
+        function checkQuizAnswer(selectedIndex, btnEl) {
+            const current = quizData[currentQuizIndex];
+            const feedbackEl = document.getElementById('quiz-feedback');
+            const options = document.getElementById('quiz-options').children;
+
+            // 禁用所有按鈕
+            for (let btn of options) {
+                btn.disabled = true;
+                btn.classList.add('opacity-75');
+            }
+
+            if (current.options[selectedIndex].correct) {
+                playSuccessSound();
+                btnEl.classList.remove('border-gray-200');
+                btnEl.classList.add('border-green-500', 'bg-green-50', 'text-green-800');
+                feedbackEl.className = "p-4 rounded-xl text-sm mb-4 bg-green-100 text-green-800 border border-green-200";
+                feedbackEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> ${current.explanation}`;
+                updateScore(30);
+            } else {
+                playErrorSound();
+                btnEl.classList.remove('border-gray-200');
+                btnEl.classList.add('border-red-500', 'bg-red-50', 'text-red-800');
+                feedbackEl.className = "p-4 rounded-xl text-sm mb-4 bg-red-100 text-red-800 border border-red-200";
+                feedbackEl.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> 答錯了，請再加把勁！說明：${current.explanation}`;
+            }
+
+            feedbackEl.classList.remove('hidden');
+            document.getElementById('next-quiz-btn').classList.remove('hidden');
+        }
+
+        // 下一題或進入配對遊戲
+        function nextQuiz() {
+            currentQuizIndex++;
+            if (currentQuizIndex < quizData.length) {
+                loadQuiz();
+            } else {
+                initMatchGame();
+            }
+        }
+
+        // 初始化 Phase 2 配對遊戲
+        function initMatchGame() {
+            document.getElementById('screen-quiz').classList.add('hidden');
+            document.getElementById('screen-match').classList.remove('hidden');
+            document.getElementById('game-status').innerText = "階段：2/2 服務地點配對";
+            document.getElementById('timer-box').classList.remove('hidden');
+
+            timeLeft = 30;
+            document.getElementById('timer-display').innerText = timeLeft;
+            
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer-display').innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    finishGame();
+                }
+            }, 1000);
+
+            renderMatchItems();
+        }
+
+        // 渲染配對選項 (點擊式互動)
+        function renderMatchItems() {
+            const itemList = document.getElementById('item-list');
+            const targetList = document.getElementById('target-list');
+            itemList.innerHTML = '';
+            targetList.innerHTML = '';
+
+            // 打亂順序
+            const shuffledItems = [...matchData].sort(() => Math.random() - 0.5);
+            const shuffledTargets = [...matchData].sort(() => Math.random() - 0.5);
+
+            shuffledItems.forEach(item => {
+                const el = document.createElement('div');
+                el.id = item.id;
+                el.className = "p-3 bg-purple-50 border border-purple-200 rounded-lg text-xs font-bold text-eda-purple cursor-pointer hover:bg-purple-100 transition flex justify-between items-center";
+                el.innerHTML = `<span>${item.label}</span> <i class="fa-solid fa-hand-pointer text-purple-300"></i>`;
+                el.onclick = () => selectItem(item.id, el);
+                itemList.appendChild(el);
+            });
+
+            shuffledTargets.forEach(target => {
+                const el = document.createElement('div');
+                el.dataset.targetId = target.target;
+                el.className = "p-3 bg-teal-50 border border-teal-200 rounded-lg text-xs font-bold text-eda-teal cursor-pointer hover:bg-teal-100 transition flex justify-between items-center drop-zone";
+                el.innerHTML = `<span>${target.targetName}</span> <i class="fa-solid fa-location-crosshairs text-teal-300"></i>`;
+                el.onclick = () => selectTarget(target.target, el);
+                targetList.appendChild(el);
+            });
+        }
+
+        let selectedTask = null;
+        let selectedTaskEl = null;
+
+        function selectItem(id, el) {
+            if (el.classList.contains('opacity-40')) return;
+            
+            // 重置之前選取的
+            if (selectedTaskEl) {
+                selectedTaskEl.classList.remove('ring-2', 'ring-purple-600', 'bg-purple-200');
+            }
+            
+            selectedTask = matchData.find(m => m.id === id);
+            selectedTaskEl = el;
+            el.classList.add('ring-2', 'ring-purple-600', 'bg-purple-200');
+            document.getElementById('match-feedback').innerText = `已選擇：「${selectedTask.label}」，請點擊對應的地點！`;
+            document.getElementById('match-feedback').className = "text-center font-bold text-xs text-eda-purple";
+        }
+
+        function selectTarget(targetId, el) {
+            if (!selectedTask) {
+                document.getElementById('match-feedback').innerText = "請先點擊左側的「服務任務」！";
+                document.getElementById('match-feedback').className = "text-center font-bold text-xs text-red-500";
+                return;
+            }
+
+            if (el.classList.contains('opacity-40')) return;
+
+            if (selectedTask.target === targetId) {
+                playSuccessSound();
+                updateScore(10);
+                matchedCount++;
+
+                selectedTaskEl.classList.add('opacity-40', 'pointer-events-none');
+                selectedTaskEl.classList.remove('ring-2', 'ring-purple-600');
+                selectedTaskEl.innerHTML += ' <i class="fa-solid fa-check text-green-600"></i>';
+
+                el.classList.add('opacity-40', 'pointer-events-none');
+                el.innerHTML += ' <i class="fa-solid fa-check text-green-600"></i>';
+
+                document.getElementById('match-feedback').innerText = `配對成功！「${selectedTask.label}」於「${selectedTask.targetName}」`;
+                document.getElementById('match-feedback').className = "text-center font-bold text-xs text-green-600";
+
+                selectedTask = null;
+                selectedTaskEl = null;
+
+                if (matchedCount === matchData.length) {
+                    clearInterval(timer);
+                    setTimeout(finishGame, 800);
+                }
+            } else {
+                playErrorSound();
+                document.getElementById('match-feedback').innerText = "配對不正確，再試一次看看！";
+                document.getElementById('match-feedback').className = "text-center font-bold text-xs text-red-500";
+            }
+        }
+
+        // 結束遊戲與慶祝特效
+        function finishGame() {
+            clearInterval(timer);
+            document.getElementById('screen-match').classList.add('hidden');
+            document.getElementById('timer-box').classList.add('hidden');
+            document.getElementById('screen-result').classList.remove('hidden');
+            document.getElementById('game-status').innerText = "體驗完成！";
+
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('final-title').innerText = document.getElementById('title-display').innerText;
+
+            // 五彩紙屑禮花特效
+            try {
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            } catch(e){}
+        }
+
+        // 列印/保存志工證
+        function printCertificate() {
+            window.print();
+        }
+    </script>
+</body>
+</html>
